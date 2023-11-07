@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <!-- 引入Favicon -->
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
-    <title>{{ name }}'s Watchlist</title>
+    <title>{{ user.name }}'s Watchlist</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" type="text/css">
 </head>
 
@@ -14,7 +14,7 @@
 <body>
     <h2>
         <img alt="sweet" class="tang" src="{{ url_for('static', filename='images/740.jpg') }}">
-        {{ name }}'s Watchlist
+        {{ user.name }}'s Watchlist
     </h2>
 
     {# 使用 length 过滤器获取 movies 变量的长度 #} <p>{{ movies|length }} Titles</p>
