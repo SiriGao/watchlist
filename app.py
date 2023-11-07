@@ -3,6 +3,7 @@ from flask import url_for
 from flask_sqlalchemy import SQLAlchemy # 导入扩展类
 import os
 import sys
+from flask import Flask, render_template
 
 
 #数据库配置
@@ -80,20 +81,9 @@ movies = [
 ]
 '''
 
-#返回渲染好的模板作为响应
-
-from flask import Flask, render_template
-# ...
-@app.route('/') #装饰器，为函数绑定对应URL，当用户访问URL，触发此函数，获得返回值，并显示
-def index():
-    user = User.query.first() # 读取用户记录
-    movies = Movie.query.all() # 读取所有电影记录
-    return render_template('index.html', user=user, movies=movies)
 
 #创建自定义命令 forge
 import click
-
-
 @app.cli.command()
 def forge():
     """Generate fake data."""
@@ -122,3 +112,23 @@ def forge():
 
     db.session.commit()
     click.echo('Done.')
+
+#模板上下文处理函数
+@app.context_processor
+def inject_user():  # 函数名可以随意修改
+    user = User.query.first()
+    return dict(user=user)  # 需要返回字典，等同于 return {'user': user}
+
+#404 错误处理函数
+@app.errorhandler(404)  # 传入要处理的错误代码
+def page_not_found(e):  # 接受异常对象作为参数
+    return render_template('404.html'), 404  # 返回模板和状态码
+
+#返回渲染好的模板作为响应
+
+
+# ...
+@app.route('/') #装饰器，为函数绑定对应URL，当用户访问URL，触发此函数，获得返回值，并显示
+def index():
+    movies = Movie.query.all() # 读取所有电影记录
+    return render_template('index.html', movies=movies)
