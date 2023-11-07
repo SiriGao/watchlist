@@ -7,6 +7,7 @@ app = Flask(__name__)#通过实例化这个类，创建一个程序对象app
 #def hello():
     #return 'Hello'
    # return '<h1>Hello Totoro!</h1><img src="http://helloflask.com/totoro.gif">'
+   
 
 @app.route('/user/<name>')
 def user_page(name):
@@ -47,3 +48,6 @@ from flask import Flask, render_template
 @app.route('/')
 def index():
     return render_template('index.html', name=name, movies=movies)
+
+
+ #<img src="{{ url_for('static', filename='foo.jpg') }}">，花括号部分的调用会返回 /static/foo.jpg 
