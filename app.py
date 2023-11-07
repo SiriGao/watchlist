@@ -1,26 +1,12 @@
 from flask import Flask
-app = Flask(__name__)#通过实例化这个类，创建一个程序对象app
-#注册请求处理函数
-#@app.route('/') #装饰器，为函数绑定对应URL，当用户访问URL，触发此函数，获得返回值，并显示
-#Web程序：编写不同的函数处理对应URL的请求
-#def hello():
-    #return 'Welcome to My Watchlist!'
-'''
-@app.route('/home')
-@app.route('/index')
-@app.route('/')
-def hello():
-    return '<h1>Hello Totoro!</h1><img src="http://helloflask.com/totoro.gif">'
-'''
-
-
 from flask import url_for
-
-# ...
-
-@app.route('/')
+app = Flask(__name__)#通过实例化这个类，创建一个程序对象app
+#Web程序：编写不同的函数处理对应URL的请求
+#注册请求处理函数
+@app.route('/')  #装饰器，为函数绑定对应URL，当用户访问URL，触发此函数，获得返回值，并显示
 def hello():
-    return 'Hello'
+    #return 'Hello'
+    return '<h1>Hello Totoro!</h1><img src="http://helloflask.com/totoro.gif">'
 
 @app.route('/user/<name>')
 def user_page(name):
