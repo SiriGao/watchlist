@@ -127,6 +127,18 @@ def inject_user():  # 函数名可以随意修改
     user = User.query.first()
     return dict(user=user)  # 需要返回字典，等同于 return {'user': user}
 
+@app.errorhandler(400)
+def bad_request(e):
+    return render_template('400.html'), 400
+
+@app.errorhandler(500)
+def internal_server_error(e):
+    return render_template('500.html'), 500
+
+#404 错误处理函数
+@app.errorhandler(404)  # 传入要处理的错误代码
+def page_not_found(e):  # 接受异常对象作为参数
+    return render_template('404.html'), 404  # 返回模板和状态码
 
 @app.route('/user/<name>')
 def user_page(name):
@@ -145,18 +157,7 @@ def test_url_for():
  return 'Test page'
 
 
-@app.errorhandler(400)
-def bad_request(e):
-    return render_template('400.html'), 400
 
-@app.errorhandler(500)
-def internal_server_error(e):
-    return render_template('500.html'), 500
-
-#404 错误处理函数
-@app.errorhandler(404)  # 传入要处理的错误代码
-def page_not_found(e):  # 接受异常对象作为参数
-    return render_template('404.html'), 404  # 返回模板和状态码
 
 #返回渲染好的模板作为响应
 #创建电影条目
