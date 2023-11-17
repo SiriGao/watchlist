@@ -4,14 +4,90 @@
 <div class="content-container">
     <div class="movie-list-container">
         <p>{{ movies|length }} Movies</p>
-        <a href="{{ url_for('movies_with_box_office') }}" class="btn">Box Office Anylasis</a>
+
+
+        <div style="text-align: center; margin: 20px;">
+            <a href="{{ url_for('movies_with_box_office') }}" class="btn"
+                style="display: inline-block; padding: 10px 20px; background-color: #007BFF; color: white; border: none; border-radius: 5px; text-decoration: none; cursor: pointer;">票房分析</a>
+        </div>
+
+
+
+        <form method="get" action="{{ url_for('index') }}" style="text-align: center; margin: 20px;">
+
+            <input type="text" name="search" placeholder="搜索电影…" autocomplete="off"
+                value="{{ request.args.get('search', '') }}"
+                style="padding: 10px; width: 200px; border-radius: 5px; border: 1px solid #ddd;">
+            <input type="submit" value="搜索"
+                style="padding: 10px 20px; background-color: #007BFF; color: white; border: none; border-radius: 5px; cursor: pointer;">
+            <a href="{{ url_for('index') }}" class="btn"
+                style="padding: 10px 15px; background-color: #007BFF; color: white; border: none; border-radius: 5px; text-decoration: none; cursor: pointer;">清除搜索</a>
+
+
+        </form>
 
         <form method="get" action="{{ url_for('index') }}">
-            <input type="text" name="search" placeholder="Search for movies..." autocomplete="off"
-                value="{{ request.args.get('search', '') }}">
-            <input type="submit" value="Search">
+            Country:
+            <select name="country">
+                <option value="">All</option>
+                <option value="中国" {% if request.args.get('country')=='中国' %}selected{% endif %}>中国</option>
+                <option value="美国" {% if request.args.get('country')=='美国' %}selected{% endif %}>美国</option>
+
+            </select>
+
+            Genre:
+            <select name="genre">
+                <option value="">All</option>
+                <option value="战争" {% if request.args.get('genre')=='战争' %}selected{% endif %}>战争</option>
+                <option value="动画" {% if request.args.get('genre')=='动画' %}selected{% endif %}>动画</option>
+                <option value="科幻" {% if request.args.get('genre')=='科幻' %}selected{% endif %}>科幻</option>
+                <option value="喜剧" {% if request.args.get('genre')=='喜剧' %}selected{% endif %}>喜剧</option>
+                <option value="动作" {% if request.args.get('genre')=='动作' %}selected{% endif %}>动作</option>
+            </select>
+
+
+            Year:
+            <select name="year">
+                <option value="">All</option>
+                {% for y in range(2023, 1922, -1) %}
+                <option value="{{ y }}" {% if request.args.get('year')|string==y|string %}selected{% endif %}>{{ y }}
+                </option>
+                {% endfor %}
+            </select>
+
+
+
+            <input type="submit" value="Filter">
+            <a href="{{ url_for('index', search=request.args.get('search', '')) }}" class="btn">Clear Filter</a>
         </form>
-        <a href="{{ url_for('index') }}" class="btn">Clear Search</a>
+
+        <!-- 显示当前筛选条件 -->
+        <div>
+            {% if request.args.get('country') or request.args.get('genre') or request.args.get('year') %}
+            <p>Current Filter:</p>
+            <ul>
+                {% if request.args.get('country') %}
+                <li>Country: {{ request.args.get('country') }}</li>
+                {% endif %}
+                {% if request.args.get('genre') %}
+                <li>Genre: {{ request.args.get('genre') }}</li>
+                {% endif %}
+                {% if request.args.get('year') %}
+                <li>Year: {{ request.args.get('year') }}</li>
+                {% endif %}
+            </ul>
+            {% endif %}
+        </div>
+
+
+
+
+
+
+
+
+
+
         <ul class="movie-list">
             {% for movie in movies %}
             <li><a class="btn" href="{{ url_for('movie_detail', movie_id=movie.id) }}">{{ movie.title }}</a> - {{

@@ -39,15 +39,28 @@ def index():
         flash('Movie added.')  # 显示成功创建的提示
         return redirect(url_for('index'))  # 重定向回主页
     
-    # 获取查询参数
-    search_query = request.args.get('search', '')  # 默认值为空字符串
+    
+    # 获取搜索和筛选参数
+    search_query = request.args.get('search', '')
+    filter_country = request.args.get('country')
+    filter_genre = request.args.get('genre')
+    filter_year = request.args.get('year')
 
-    # 如果有查询参数，则使用它来筛选电影
+    # 构建基础查询
+    query = Movie.query
+
+    # 应用搜索条件  # 应用筛选条件
     if search_query:
-        movies = Movie.query.filter(Movie.title.contains(search_query)).all()
-    else:
-        # 如果没有查询参数，显示所有电影
-        movies = Movie.query.all()
+        query = query.filter(Movie.title.contains(search_query))
+    if filter_country:
+            query = query.filter(Movie.country == filter_country)
+    if filter_genre:
+            query = query.filter(Movie.genre == filter_genre)
+    if filter_year:
+            query = query.filter(Movie.year == filter_year)
+    
+
+    movies = query.all()
 
     return render_template('index.html', movies=movies)
     
