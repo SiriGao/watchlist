@@ -3,6 +3,18 @@
 
 {% block content %}
 <p>{{ movies|length }} Titles</p>
+
+<!-- 在模板中可以直接使用 current_user 变量 -->
+{% if current_user.is_authenticated %}
+<form method="post">
+    <!-- 在 <form> 元素使用 action 属性可以自定义目标 URL -->
+    Name <input type="text" name="title" autocomplete="off" required>
+    Year <input type="text" name="year" autocomplete="off" required>
+    <!-- autocomplete 属性设为 off 来关闭自动完成（按下输入框不显示历史输入记录） -->
+    <!-- 添加 required 标志属性，如果用户没有输入内容就按下了提交按钮，浏览器会显示错误提示。 -->
+    <input class="btn" type="submit" name="submit" value="Add">
+</form>
+{% endif %}
 <ul class="movie-list">
     {% for movie in movies %}
     <li>{{ movie.title }} - {{ movie.year }}
@@ -25,15 +37,3 @@
 
 
 <p>{{ movies|length }} Titles</p>
-
-<!-- 在模板中可以直接使用 current_user 变量 -->
-{% if current_user.is_authenticated %}
-<form method="post">
-    <!-- 在 <form> 元素使用 action 属性可以自定义目标 URL -->
-    Name <input type="text" name="title" autocomplete="off" required>
-    Year <input type="text" name="year" autocomplete="off" required>
-    <!-- autocomplete 属性设为 off 来关闭自动完成（按下输入框不显示历史输入记录） -->
-    <!-- 添加 required 标志属性，如果用户没有输入内容就按下了提交按钮，浏览器会显示错误提示。 -->
-    <input class="btn" type="submit" name="submit" value="Add">
-</form>
-{% endif %}

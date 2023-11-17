@@ -22,16 +22,25 @@ def forge():
 
     name = 'Grey Li'
     movies = [
-        {'title': 'My Neighbor Totoro', 'year': '1988'},
-        {'title': 'Dead Poets Society', 'year': '1989'},
-        {'title': 'A Perfect World', 'year': '1993'},
-        {'title': 'Leon', 'year': '1994'},
-        {'title': 'Mahjong', 'year': '1996'},
-        {'title': 'Swallowtail Butterfly', 'year': '1996'},
-        {'title': 'King of Comedy', 'year': '1999'},
-        {'title': 'Devils on the Doorstep', 'year': '1999'},
-        {'title': 'WALL-E', 'year': '2008'},
-        {'title': 'The Pork of Music', 'year': '2012'},
+        {'title': '战狼2', 'year': '2017'},
+        {'title': '哪吒之魔童降世', 'year': '2019'},
+        {'title': '流浪地球', 'year': '2019'},
+        {'title': '复仇者联盟4', 'year': '2019'},
+        {'title': '红海行动', 'year': '2018'},
+        {'title': '唐人街探案2', 'year': '2018'},
+        {'title': '我不是药神', 'year': '2018'},
+        {'title': '中国机长', 'year': '2019'},
+        {'title': '速度与激情8', 'year': '2017'},
+        {'title': '西虹市首富', 'year': '2018'},
+        {'title': '速度与激情9', 'year': '2021'},
+        {'title': '长津湖', 'year': '2021'},
+        {'title': '你好，李焕英', 'year': '2021'},
+        {'title': '我和我的家乡', 'year': '2020'},
+        {'title': '姜子牙', 'year': '2020'},
+        {'title': '八佰', 'year': '2020'},
+        {'title': '捉妖记2', 'year': '2018'},
+        {'title': '复仇者联盟3', 'year': '2018'},
+        
     ]
 
     user = User(name=name)

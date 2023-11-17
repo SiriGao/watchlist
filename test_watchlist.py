@@ -70,7 +70,7 @@ class WatchlistTestCase(unittest.TestCase):
         self.assertNotIn('<form method="post">', data)
         self.assertNotIn('Delete', data)
         self.assertNotIn('Edit', data)
-    '''
+    
     def test_login(self):
         response = self.client.post('/login', data=dict(
             username='test',
@@ -115,7 +115,7 @@ class WatchlistTestCase(unittest.TestCase):
         data = response.get_data(as_text=True)
         self.assertNotIn('Login success.', data)
         self.assertIn('Invalid input.', data)
-    '''
+    
     def test_logout(self):
         self.login()
 
