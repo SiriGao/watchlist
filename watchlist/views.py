@@ -159,3 +159,27 @@ def movie_detail(movie_id):
     box_office = MovieBox.query.filter_by(movie_id=movie_id).first()
 
     return render_template('movie_detail.html', movie=movie, actors=actors, box_office=box_office)
+
+# @app.route('/movies_with_box_office')
+# def movies_with_box_office():
+#     # 假设 MovieBox 模型包含对 Movie 的引用
+#     movies = Movie.query.all()
+#     movies_box_office = {movie.id: MovieBox.query.filter_by(movie_id=movie.id).first() for movie in movies}
+
+#     return render_template('movies_with_box_office.html', movies=movies, movies_box_office=movies_box_office)
+
+@app.route('/movies_with_box_office')
+def movies_with_box_office():
+    movies = Movie.query.all()
+    movie_data = [
+        {
+            "title": movie.title,
+            "box_office": MovieBox.query.filter_by(movie_id=movie.id).first().box if MovieBox.query.filter_by(movie_id=movie.id).first() else 0
+        }
+        for movie in movies
+    ]
+
+    # 按票房从高到低排序
+    movie_data.sort(key=lambda x: x['box_office'], reverse=True)
+
+    return render_template('movies_with_box_office.html', movie_data=movie_data)

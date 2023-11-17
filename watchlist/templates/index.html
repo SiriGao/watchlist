@@ -4,6 +4,8 @@
 <div class="content-container">
     <div class="movie-list-container">
         <p>{{ movies|length }} Movies</p>
+        <a href="{{ url_for('movies_with_box_office') }}" class="btn">Box Office Anylasis</a>
+
         <form method="get" action="{{ url_for('index') }}">
             <input type="text" name="search" placeholder="Search for movies..." autocomplete="off"
                 value="{{ request.args.get('search', '') }}">
@@ -13,8 +15,7 @@
         <ul class="movie-list">
             {% for movie in movies %}
             <li><a class="btn" href="{{ url_for('movie_detail', movie_id=movie.id) }}">{{ movie.title }}</a> - {{
-                movie.release_date.strftime('%Y-%m-%d')}} - {{ movie.country }} - {{ movie.genre
-                }} - {{movie.year }}
+                movie.country }} {{ movie.genre}} {{movie.year }}
 
                 <span class="float-right">
                     {% if current_user.is_authenticated %}

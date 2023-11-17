@@ -163,3 +163,15 @@ input[name=year] {
     margin-top: 100px;
     /* 在顶部添加20px的间距 */
 }
+
+/* .movie-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+} */
+
+/* .movie-info {
+    text-align: right;
+    margin-right: 10px;
+     根据需要调整间隔大小 
+} */

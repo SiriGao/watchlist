@@ -59,3 +59,5 @@ from watchlist import app
 @app.template_filter('to_date_string')
 def to_date_string(value):
     return value.strftime('%Y-%m-%d') if value else ''
+
+

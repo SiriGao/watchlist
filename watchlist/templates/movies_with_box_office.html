@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- 图表容器 -->
+<canvas id="boxOfficeChart" width="400" height="400"></canvas>
+
+<!-- 引入 Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    const ctx = document.getElementById('boxOfficeChart').getContext('2d');
+    // const movieData = {{ movie_data| tojson }};
+    const movieData = JSON.parse('{{ movie_data | tojson | safe }}');
+    const movieTitles = movieData.map(movie => movie.title);
+    const movieBoxOffices = movieData.map(movie => movie.box_office);
+
+    const chart = new Chart(ctx, {
+        type: 'line', // 图表类型
+        data: {
+            labels: movieTitles,
+            datasets: [{
+                label: 'Box Office',
+                data: movieBoxOffices,
+                fill: false,
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0.1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+
+
+{% endblock %}
