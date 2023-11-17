@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import datetime
 from flask import render_template, request, url_for, redirect, flash
 from flask_login import login_user, login_required, logout_user, current_user
 
@@ -8,24 +9,36 @@ from watchlist.models import User, Movie
 
 from flask import request, url_for, redirect, flash
 
-# ...
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':  # 判断是否是 POST 请求
         # 获取表单数据
         title = request.form.get('title')  # 传入表单对应输入字段的 name 值
-        year = request.form.get('year')
+        #year = request.form.get('year')
+        release_date = request.form.get('release_date')
+        country = request.form.get('country')
+        genre = request.form.get('genre')
+
         # 验证数据
-        if not title or not year or len(year) > 4 or len(title) > 60:
-            flash('Invalid input.')  # 显示错误提示
+        if not title or len(title) > 60:
+            flash('Invalid Input.')  # 显示错误提示
             return redirect(url_for('index'))  # 重定向回主页
+        
+        try:
+            release_date = datetime.datetime.strptime(release_date, '%Y-%m-%d').date()
+            year = release_date.year  # 从 release_date 提取年份
+        except ValueError:
+            flash('Invalid release date format.')
+            return redirect(url_for('index'))
+        
         # 保存表单数据到数据库
-        movie = Movie(title=title, year=year)  # 创建记录
+        movie = Movie(title=title, year=year, release_date=release_date, country=country, genre=genre) # 创建记录
         db.session.add(movie)  # 添加到数据库会话
         db.session.commit()  # 提交数据库会话
-        flash('Item created.')  # 显示成功创建的提示
+        flash('Movie added.')  # 显示成功创建的提示
         return redirect(url_for('index'))  # 重定向回主页
+    
     # 获取查询参数
     search_query = request.args.get('search', '')  # 默认值为空字符串
 
@@ -46,16 +59,34 @@ def edit(movie_id):
 
     if request.method == 'POST':
         title = request.form['title']
-        year = request.form['year']
+        #year = request.form['year']
+        release_date = request.form.get('release_date')
+        country = request.form.get('country')
+        genre = request.form.get('genre')
 
-        if not title or not year or len(year) > 4 or len(title) > 60:
-            flash('Invalid input.')
+        if not title  or  len(title) > 60:
+            flash('Invalid Input.')
             return redirect(url_for('edit', movie_id=movie_id))
-
+        
+        try:
+            # 将字符串转换为日期对象，并从中提取年份
+            release_date_obj = datetime.datetime.strptime(release_date, '%Y-%m-%d').date()
+            year = release_date_obj.year
+        except ValueError:
+            flash('Invalid release date format.')
+            return redirect(url_for('edit', movie_id=movie_id))
+        
+        
+        # 更新电影信息
         movie.title = title
-        movie.year = year
+        movie.release_date = release_date_obj
+        movie.year = str(year)  # 更新年份字段
+        movie.country = country
+        movie.genre = genre
+
+
         db.session.commit()
-        flash('Item updated.')
+        flash('Movie updated.')
         return redirect(url_for('index'))
 
     return render_template('edit.html', movie=movie)

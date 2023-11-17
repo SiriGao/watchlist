@@ -9,9 +9,10 @@
 <form method="post">
     <!-- 在 <form> 元素使用 action 属性可以自定义目标 URL -->
     Name <input type="text" name="title" autocomplete="off" required>
-    Year <input type="text" name="year" autocomplete="off" required>
-    <!-- autocomplete 属性设为 off 来关闭自动完成（按下输入框不显示历史输入记录） -->
-    <!-- 添加 required 标志属性，如果用户没有输入内容就按下了提交按钮，浏览器会显示错误提示。 -->
+    <!-- Year <input type="text" name="year" autocomplete="off" required> -->
+    Release Date <input type="date" name="release_date" required><br>
+    Country <input type="text" name="country" autocomplete="off"><br>
+    Genre <input type="text" name="genre" autocomplete="off"><br>
     <input class="btn" type="submit" name="submit" value="Add">
 </form>
 {% endif %}
@@ -31,8 +32,8 @@
 
 <ul class="movie-list">
     {% for movie in movies %}
-    <li>{{ movie.title }} - {{ movie.year }}
-        <!-- href 属性的值为 IMDb 搜索页面的 URL，搜索关键词通过查询参数 q 传入，这里传入了电影的标题。 -->
+    <li>{{ movie.title }} - {{ movie.release_date.strftime('%Y-%m-%d')}} - {{ movie.country }} - {{ movie.genre }} - {{
+        movie.year }}
         <span class="float-right">
             {% if current_user.is_authenticated %}
             <a class="btn" href="{{ url_for('edit', movie_id=movie.id) }}">Edit</a>

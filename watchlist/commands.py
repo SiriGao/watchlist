@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
+import datetime
 import click
 
 from watchlist import app, db
-from watchlist.models import User, Movie
+from watchlist.models import User, Movie, Actor, MovieActorRelation
 
 
 @app.cli.command()
@@ -21,33 +22,33 @@ def forge():
     db.create_all()
 
     name = 'Grey Li'
-    movies = [
-        {'title': '战狼2', 'year': '2017'},
-        {'title': '哪吒之魔童降世', 'year': '2019'},
-        {'title': '流浪地球', 'year': '2019'},
-        {'title': '复仇者联盟4', 'year': '2019'},
-        {'title': '红海行动', 'year': '2018'},
-        {'title': '唐人街探案2', 'year': '2018'},
-        {'title': '我不是药神', 'year': '2018'},
-        {'title': '中国机长', 'year': '2019'},
-        {'title': '速度与激情8', 'year': '2017'},
-        {'title': '西虹市首富', 'year': '2018'},
-        {'title': '速度与激情9', 'year': '2021'},
-        {'title': '长津湖', 'year': '2021'},
-        {'title': '你好，李焕英', 'year': '2021'},
-        {'title': '我和我的家乡', 'year': '2020'},
-        {'title': '姜子牙', 'year': '2020'},
-        {'title': '八佰', 'year': '2020'},
-        {'title': '捉妖记2', 'year': '2018'},
-        {'title': '复仇者联盟3', 'year': '2018'},
-        
+
+    movies=[
+        {'id': '1001', 'title': '战狼2', 'release_date': datetime.datetime(2017, 7, 27), 'country': '中国', 'genre': '战争', 'year': 2017},
+    ]
+    actors=[
+        {'id': '2001', 'name': '吴京', 'gender': '男', 'country': '中国'},
+    ]
+    relations=[
+        {'id': '1', 'movie_id': '1001', 'actor_id': '2001', 'relation_type': '主演'}
     ]
 
     user = User(name=name)
     db.session.add(user)
+    # 创建电影实例
     for m in movies:
-        movie = Movie(title=m['title'], year=m['year'])
+        movie = Movie(id=m['id'], title=m['title'], release_date=m['release_date'], country=m['country'], genre=m['genre'], year=m['year'])
         db.session.add(movie)
+
+    # 创建演员实例
+    for a in actors:
+        actor = Actor(id=a['id'], name=a['name'], gender=a['gender'], country=a['country'])
+        db.session.add(actor)
+
+    # 创建电影演员关系实例
+    for r in relations:
+        relation = MovieActorRelation(id=r['id'], movie_id=r['movie_id'], actor_id=r['actor_id'], relation_type=r['relation_type'])
+        db.session.add(relation)
 
     db.session.commit()
     click.echo('Done.')
