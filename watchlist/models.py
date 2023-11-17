@@ -31,6 +31,13 @@ class Movie(db.Model):
     genre = db.Column(db.String(10))  # 新增
     year = db.Column(db.Integer)  # 更新为 Integer 类型
 
+class MovieBox(db.Model):
+    movie_id = db.Column(db.String(10), db.ForeignKey('movie.id'), primary_key=True)
+    box = db.Column(db.Float)
+    # 建立与 Movie 模型的关系
+    movie = db.relationship('Movie', backref=db.backref('box_info', uselist=False))
+
+
 class Actor(db.Model):
     id = db.Column(db.String(10), primary_key=True)
     name = db.Column(db.String(20), nullable=False)

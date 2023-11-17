@@ -1,7 +1,7 @@
 /* 页面整体 */
 body {
     margin: auto;
-    max-width: 580px;
+    max-width: 680px;
     font-size: 14px;
     font-family: Helvetica, Arial, sans-serif;
 }
@@ -131,4 +131,35 @@ input[name=year] {
 
 .inline-form {
     display: inline;
+}
+
+#add-movie-form {
+    float: right;
+    margin-left: 20px;
+    /* 使用浮动属性将表单移到右边 */
+    /* 或者使用以下样式将表单定位到右边
+    position: absolute;
+    right: 0;
+    top: 0;
+    */
+    /* 根据需要调整其他样式 */
+}
+
+.content-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.movie-list-container {
+    flex: 6;
+    /* 左侧区域占据更多空间 */
+    margin-right: 20px;
+    /* 在两个区域之间添加一些间距 */
+}
+
+.add-movie-form-container {
+    flex: 1;
+    /* 右侧区域占据较小空间 */
+    margin-top: 100px;
+    /* 在顶部添加20px的间距 */
 }

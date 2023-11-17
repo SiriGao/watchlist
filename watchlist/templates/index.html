@@ -1,54 +1,74 @@
 {% extends 'base.html' %}
-<!-- 使用 extends 标签声明扩展自模板 base.html -->
 
 {% block content %}
-<p>{{ movies|length }} Titles</p>
+<div class="content-container">
+    <div class="movie-list-container">
+        <p>{{ movies|length }} Movies</p>
+        <form method="get" action="{{ url_for('index') }}">
+            <input type="text" name="search" placeholder="Search for movies..." autocomplete="off"
+                value="{{ request.args.get('search', '') }}">
+            <input type="submit" value="Search">
+        </form>
+        <a href="{{ url_for('index') }}" class="btn">Clear Search</a>
+        <ul class="movie-list">
+            {% for movie in movies %}
+            <li>{{ movie.title }} - {{ movie.release_date.strftime('%Y-%m-%d')}} - {{ movie.country }} - {{ movie.genre
+                }} - {{
+                movie.year }}
+                <span class="float-right">
+                    {% if current_user.is_authenticated %}
+                    <a class="btn" href="{{ url_for('edit', movie_id=movie.id) }}">Edit</a>
+                    <form class="inline-form" method="post" action="{{ url_for('delete', movie_id=movie.id) }}">
+                        <input class="btn" type="submit" name="delete" value="Delete"
+                            onclick="return confirm('Are you sure?')">
+                    </form>
+                    {% endif %}
+                    <a class="imdb" href="https://www.imdb.com/find?q={{ movie.title }}" target="_blank"
+                        title="Find this movie on IMDb">IMDb</a>
+                </span>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
 
-<!-- 在模板中可以直接使用 current_user 变量 -->
-{% if current_user.is_authenticated %}
-<form method="post">
-    <!-- 在 <form> 元素使用 action 属性可以自定义目标 URL -->
-    Name <input type="text" name="title" autocomplete="off" required>
-    <!-- Year <input type="text" name="year" autocomplete="off" required> -->
-    Release Date <input type="date" name="release_date" required><br>
-    Country <input type="text" name="country" autocomplete="off"><br>
-    Genre <input type="text" name="genre" autocomplete="off"><br>
-    <input class="btn" type="submit" name="submit" value="Add">
-</form>
-{% endif %}
+    {% if current_user.is_authenticated %}
+    <div class="add-movie-form-container">
 
-<!-- 查询表单 -->
-<form method="get" action="{{ url_for('index') }}">
-    <!-- 使用 value 属性显示当前的搜索词 -->
-    <input type="text" name="search" placeholder="Search for movies..." autocomplete="off"
-        value="{{ request.args.get('search', '') }}">
-    <input type="submit" value="Search">
-</form>
+        <form method="post" class="add-movie-form"
+            style="max-width: 500px; margin: auto; padding: 15px; border: 1px solid #ddd; border-radius: 10px; box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);">
+            <h2 style="text-align: center;">Add New Movie</h2>
+            <div style="margin-bottom: 10px;">
+                <label for="title" style="display: block; margin-bottom: 5px;">Name</label>
+                <input type="text" id="title" name="title" autocomplete="off" required
+                    style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;">
+            </div>
+            <div style="margin-bottom: 10px;">
+                <label for="release_date" style="display: block; margin-bottom: 5px;">Release Date</label>
+                <input type="date" id="release_date" name="release_date" required
+                    style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;">
+            </div>
+            <div style="margin-bottom: 10px;">
+                <label for="country" style="display: block; margin-bottom: 5px;">Country</label>
+                <input type="text" id="country" name="country" autocomplete="off"
+                    style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;">
+            </div>
+            <div style="margin-bottom: 10px;">
+                <label for="genre" style="display: block; margin-bottom: 5px;">Genre</label>
+                <input type="text" id="genre" name="genre" autocomplete="off"
+                    style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;">
+            </div>
+            <div style="text-align: center;">
+                <input class="btn" type="submit" name="submit" value="Add"
+                    style="padding: 8px 16px; border-radius: 4px; border: none; background-color: #007bff; color: white; cursor: pointer;">
+            </div>
+        </form>
+    </div>
+    {% endif %}
+</div>
 
-<!-- 返回未查询状态的按钮 -->
-<a href="{{ url_for('index') }}" class="btn">Clear Search</a>
-
-
-
-<ul class="movie-list">
-    {% for movie in movies %}
-    <li>{{ movie.title }} - {{ movie.release_date.strftime('%Y-%m-%d')}} - {{ movie.country }} - {{ movie.genre }} - {{
-        movie.year }}
-        <span class="float-right">
-            {% if current_user.is_authenticated %}
-            <a class="btn" href="{{ url_for('edit', movie_id=movie.id) }}">Edit</a>
-            <form class="inline-form" method="post" action="{{ url_for('delete', movie_id=movie.id) }}">
-                <input class="btn" type="submit" name="delete" value="Delete" onclick="return confirm('Are you sure?')">
-            </form>
-            {% endif %}
-            <a class="imdb" href="https://www.imdb.com/find?q={{ movie.title }}" target="_blank"
-                title="Find this movie on IMDb">IMDb</a>
-        </span>
-    </li>
-    {% endfor %}
-</ul>
 <img alt="chuo740" class="chuo" src="{{ url_for('static', filename='images/chuo.gif') }}" title="chuo~chuo~chuo~">
 {% endblock %}
+
 
 
 <p>{{ movies|length }} Titles</p>
