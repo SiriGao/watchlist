@@ -26,9 +26,18 @@ def index():
         db.session.commit()  # 提交数据库会话
         flash('Item created.')  # 显示成功创建的提示
         return redirect(url_for('index'))  # 重定向回主页
+    # 获取查询参数
+    search_query = request.args.get('search', '')  # 默认值为空字符串
 
-    movies = Movie.query.all()
+    # 如果有查询参数，则使用它来筛选电影
+    if search_query:
+        movies = Movie.query.filter(Movie.title.contains(search_query)).all()
+    else:
+        # 如果没有查询参数，显示所有电影
+        movies = Movie.query.all()
+
     return render_template('index.html', movies=movies)
+    
 
 @app.route('/movie/edit/<int:movie_id>', methods=['GET', 'POST'])
 @login_required
