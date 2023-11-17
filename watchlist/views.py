@@ -4,7 +4,7 @@ from flask import render_template, request, url_for, redirect, flash
 from flask_login import login_user, login_required, logout_user, current_user
 
 from watchlist import app, db
-from watchlist.models import User, Movie
+from watchlist.models import Actor, MovieActorRelation, MovieBox, User, Movie
 
 
 from flask import request, url_for, redirect, flash
@@ -150,3 +150,12 @@ def logout():
     logout_user()
     flash('Goodbye.')
     return redirect(url_for('index'))
+
+
+@app.route('/movie/<int:movie_id>')
+def movie_detail(movie_id):
+    movie = Movie.query.get_or_404(movie_id)
+    actors = MovieActorRelation.query.filter_by(movie_id=movie_id).join(Actor, MovieActorRelation.actor_id == Actor.id).all()
+    box_office = MovieBox.query.filter_by(movie_id=movie_id).first()
+
+    return render_template('movie_detail.html', movie=movie, actors=actors, box_office=box_office)

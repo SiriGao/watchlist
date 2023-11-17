@@ -12,11 +12,13 @@
         <a href="{{ url_for('index') }}" class="btn">Clear Search</a>
         <ul class="movie-list">
             {% for movie in movies %}
-            <li>{{ movie.title }} - {{ movie.release_date.strftime('%Y-%m-%d')}} - {{ movie.country }} - {{ movie.genre
-                }} - {{
-                movie.year }}
+            <li><a class="btn" href="{{ url_for('movie_detail', movie_id=movie.id) }}">{{ movie.title }}</a> - {{
+                movie.release_date.strftime('%Y-%m-%d')}} - {{ movie.country }} - {{ movie.genre
+                }} - {{movie.year }}
+
                 <span class="float-right">
                     {% if current_user.is_authenticated %}
+
                     <a class="btn" href="{{ url_for('edit', movie_id=movie.id) }}">Edit</a>
                     <form class="inline-form" method="post" action="{{ url_for('delete', movie_id=movie.id) }}">
                         <input class="btn" type="submit" name="delete" value="Delete"

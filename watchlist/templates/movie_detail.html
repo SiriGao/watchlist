@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>{{ movie.title }} ({{ movie.year }})</h2>
+<p>Release Date: {{ movie.release_date }}</p>
+<p>Country: {{ movie.country }}</p>
+<p>Genre: {{ movie.genre }}</p>
+
+<h3>Actors 演员</h3>
+<ul>
+    {% for actor_relation in actors %}
+    <li>{{ actor_relation.actor.name }} - {{ actor_relation.relation_type }}</li>
+    {% endfor %}
+</ul>
+
+{% if box_office %}
+<h3>Box Office 票房</h3>
+<p>{{ box_office.box }}</p>
+{% endif %}
+
+{% endblock %}
