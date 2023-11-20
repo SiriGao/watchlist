@@ -268,5 +268,97 @@ def movie_actor_relations():
     relations = MovieActorRelation.query.join(Movie, MovieActorRelation.movie_id == Movie.id).join(Actor, MovieActorRelation.actor_id == Actor.id).all()
     return render_template('movie_actor_relations.html', relations=relations)
 
+import csv
+from flask import Response
 
+@app.route('/export-movies')
+def export_movies():
+    # 查询电影数据
+    movies = Movie.query.all()
 
+    # 创建 CSV 数据
+    csv_data = [['Title', 'Release Date', 'Country', 'Genre', 'Year']]
+    for movie in movies:
+        csv_data.append([
+            movie.title, 
+            movie.release_date.strftime('%Y-%m-%d') if movie.release_date else '', 
+            movie.country, 
+            movie.genre, 
+            str(movie.year)  # 确保年份是字符串格式
+        ])
+
+    # 创建一个生成器，用于流式传输 CSV 数据
+    def generate():
+        for row in csv_data:
+            yield ','.join(row) + '\n'
+
+    # 创建响应
+    response = Response(generate(), mimetype='text/csv')
+    response.headers.set('Content-Disposition', 'attachment', filename='movies.csv')
+    return response
+
+@app.route('/export-movie-actor-relations')
+def export_movie_actor_relations():
+    # 查询 Movie Actor Relations 数据
+    relations = MovieActorRelation.query.all()
+
+    # 创建 CSV 数据
+    csv_data = [['Movie Title', 'Actor Name', 'Relation Type']]
+    for relation in relations:
+        csv_data.append([relation.movie.title, relation.actor.name, relation.relation_type])
+
+    # 创建一个生成器，用于流式传输 CSV 数据
+    def generate():
+        for row in csv_data:
+            yield ','.join(row) + '\n'
+
+    # 创建响应
+    response = Response(generate(), mimetype='text/csv')
+    response.headers.set('Content-Disposition', 'attachment', filename='movie_actor_relations.csv')
+    return response
+
+@app.route('/export-movie-boxes')
+def export_movie_boxes():
+    # 联合查询电影和电影票房数据
+    movie_boxes = db.session.query(
+        Movie.title, MovieBox.box
+    ).join(MovieBox, Movie.id == MovieBox.movie_id).all()
+
+    # 创建 CSV 数据
+    csv_data = [['Movie Title', 'Box Office']]
+    for title, box in movie_boxes:
+        csv_data.append([title, str(box)])
+
+    # 创建一个生成器，用于流式传输 CSV 数据
+    def generate():
+        for row in csv_data:
+            yield ','.join(row) + '\n'
+
+    # 创建响应
+    response = Response(generate(), mimetype='text/csv')
+    response.headers.set('Content-Disposition', 'attachment', filename='movie_boxes.csv')
+    return response
+
+@app.route('/export-actors')
+def export_actors():
+    # 查询演员数据
+    actors = Actor.query.all()
+
+    # 创建 CSV 数据
+    csv_data = [['Name', 'Gender', 'Country']]
+    for actor in actors:
+        csv_data.append([
+            actor.name or '', 
+            actor.gender or '', 
+            actor.country or ''
+        ])
+
+    # 创建一个生成器，用于流式传输 CSV 数据
+    def generate():
+        for row in csv_data:
+            yield ','.join(row) + '\n'
+
+    # 创建响应
+    response = Response(generate(), mimetype='text/csv')
+    response.headers.set('Content-Disposition', 'attachment', filename='actors.csv')
+    return response

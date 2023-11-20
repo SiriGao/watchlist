@@ -3,13 +3,7 @@
 {% block content %}
 <div class="content-container">
     <div class="movie-list-container">
-        <p>{{ movies|length }} Movies</p>
-
-
-        <!-- <div style="text-align: center; margin: 20px;">
-            <a href="{{ url_for('movies_with_box_office') }}" class="btn"
-                style="display: inline-block; padding: 10px 20px; background-color: #007BFF; color: white; border: none; border-radius: 5px; text-decoration: none; cursor: pointer;">票房分析</a>
-        </div> -->
+        <p>{{ movies|length }} Movies</p> <a href="{{ url_for('export_movies') }}" class="btn">Export Movies</a>
 
 
 

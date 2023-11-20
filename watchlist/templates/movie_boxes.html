@@ -4,6 +4,9 @@
 <div class="content-container">
     <div class="movie-list-container">
         <h2>Movie Boxes</h2>
+        <!-- 在 movie_boxes.html 中添加导出按钮 -->
+        <a href="{{ url_for('export_movie_boxes') }}" class="btn">Export Movie Boxes</a>
+
         <table style="width: 100%; border-collapse: collapse;">
             <thead>
                 <tr>
