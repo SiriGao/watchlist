@@ -196,3 +196,26 @@ def movies_with_box_office():
     movie_data.sort(key=lambda x: x['box_office'], reverse=True)
 
     return render_template('movies_with_box_office.html', movie_data=movie_data)
+
+
+@app.route('/actors')
+def actors():
+    actors = Actor.query.all()
+    return render_template('actors.html', actors=actors)
+
+
+@app.route('/movie_boxes')
+def movie_boxes():
+    movies = Movie.query.all()
+    movie_boxes = {movie.id: MovieBox.query.filter_by(movie_id=movie.id).first() for movie in movies}
+
+    return render_template('movie_boxes.html', movies=movies, movie_boxes=movie_boxes)
+
+
+@app.route('/movie_actor_relations')
+def movie_actor_relations():
+    relations = MovieActorRelation.query.join(Movie, MovieActorRelation.movie_id == Movie.id).join(Actor, MovieActorRelation.actor_id == Actor.id).all()
+    return render_template('movie_actor_relations.html', relations=relations)
+
+
+

@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="content-container">
+    <div class="movie-list-container">
+        <h2>Actors</h2>
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr>
+                    <th style="border-bottom: 1px solid #ddd; padding: 10px; text-align: left;">Name</th>
+                    <th style="border-bottom: 1px solid #ddd; padding: 10px; text-align: left;">Gender</th>
+                    <th style="border-bottom: 1px solid #ddd; padding: 10px; text-align: left;">Country</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for actor in actors %}
+                <tr>
+                    <td style="padding: 10px; border-bottom: 1px solid #ddd;">{{ actor.name }}</td>
+                    <td style="padding: 10px; border-bottom: 1px solid #ddd;">{{ actor.gender }}</td>
+                    <td style="padding: 10px; border-bottom: 1px solid #ddd;">{{ actor.country }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

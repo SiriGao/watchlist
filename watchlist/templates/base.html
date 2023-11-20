@@ -31,6 +31,10 @@
             {% else %}
             <li><a href="{{ url_for('login') }}">Login</a></li>
             {% endif %}
+            <li><a href="{{ url_for('actors') }}">Actors</a></li>
+            <li><a href="{{ url_for('movie_actor_relations') }}">Movie Actor Relations</a></li>
+            <li><a href="{{ url_for('movie_boxes') }}">Movie Boxes</a></li>
+            <li><a href="{{ url_for('movies_with_box_office') }}">Box Office Analysis</a></li>
         </ul>
     </nav>
     {% block content %}{% endblock %}

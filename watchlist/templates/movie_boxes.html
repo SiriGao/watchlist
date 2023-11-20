@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="content-container">
+    <div class="movie-list-container">
+        <h2>Movie Boxes</h2>
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr>
+                    <th style="border-bottom: 1px solid #ddd; padding: 10px; text-align: left;">Movie Title</th>
+                    <th style="border-bottom: 1px solid #ddd; padding: 10px; text-align: left;">Box Office</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for movie in movies %}
+                <tr>
+                    <td style="padding: 10px; border-bottom: 1px solid #ddd;">{{ movie.title }}</td>
+                    <td style="padding: 10px; border-bottom: 1px solid #ddd;">{{ movie_boxes[movie.id].box if
+                        movie_boxes[movie.id] else 'N/A' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
