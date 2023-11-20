@@ -8,6 +8,18 @@
     Release Date <input type="date" name="release_date" required value="{{ movie.release_date|to_date_string }}"><br>
     Country <input type="text" name="country" autocomplete="off" value="{{ movie.country }}"><br>
     Genre <input type="text" name="genre" autocomplete="off" value="{{ movie.genre }}"><br>
+
+    Box Office <input type="text" name="box_office" autocomplete="off" value="{{ movie.box_info.box }}"><br>
+
+    Director <input type="text" name="director" autocomplete="off" value="{{ director.name if director else '' }}"><br>
+    Director Gender:
+    <input type="radio" name="director_gender" value="男" {% if director and director.gender=='男' %}checked{% endif %}> 男
+    <input type="radio" name="director_gender" value="女" {% if director and director.gender=='女' %}checked{% endif %}>
+    女<br>
+
+
+    Lead Actors <input type="text" name="lead_actors" placeholder="Actor1, Actor2, ..." autocomplete="off"><br>
+    Lead Actors Gender: <input type="text" name="lead_actors_gender" placeholder="男, 女, ..." autocomplete="off"><br>
     <input class="btn" type="submit" name="submit" value="Update">
 </form>
 {% endblock %}

@@ -39,13 +39,14 @@ class MovieBox(db.Model):
 
 
 class Actor(db.Model):
-    id = db.Column(db.String(10), primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(20), nullable=False)
     gender = db.Column(db.String(2), nullable=False)
     country = db.Column(db.String(20))
 
 class MovieActorRelation(db.Model):
-    id = db.Column(db.String(10), primary_key=True)
+    #id = db.Column(db.String(10), primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)  # 修改为自动增长
     movie_id = db.Column(db.String(10), db.ForeignKey('movie.id'), nullable=False)
     actor_id = db.Column(db.String(10), db.ForeignKey('actor.id'), nullable=False)
     relation_type = db.Column(db.String(20))

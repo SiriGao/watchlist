@@ -2,9 +2,9 @@
 
 {% block content %}
 <h2>{{ movie.title }} ({{ movie.year }})</h2>
-<p>Release Date: {{ movie.release_date }}</p>
-<p>Country: {{ movie.country }}</p>
-<p>Genre: {{ movie.genre }}</p>
+<h3>Release Date: {{ movie.release_date }}</h3>
+<h3>Country: {{ movie.country }}</h3>
+<h3>Genre: {{ movie.genre }}</h3>
 
 <h3>Actors 演员</h3>
 <ul>
@@ -17,5 +17,9 @@
 <h3>Box Office 票房</h3>
 <p>{{ box_office.box }}</p>
 {% endif %}
+
+<!-- 编辑按钮 -->
+<a href="{{ url_for('edit', movie_id=movie.id) }}" class="btn">Edit</a>
+
 
 {% endblock %}

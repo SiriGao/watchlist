@@ -69,46 +69,97 @@ def index():
 @login_required
 def edit(movie_id):
     movie = Movie.query.get_or_404(movie_id)
+    director_relation = MovieActorRelation.query.filter_by(movie_id=movie_id, relation_type='导演').first()
+    director = Actor.query.get(director_relation.actor_id) if director_relation else None
+
+    if request.method == 'GET':
+        # 如果是 GET 请求，需要处理可能不存在的导演信息
+        director = Actor.query.get(director_relation.actor_id) if director_relation else None
 
     if request.method == 'POST':
-        title = request.form['title']
-        #year = request.form['year']
-        release_date = request.form.get('release_date')
-        country = request.form.get('country')
-        genre = request.form.get('genre')
+        # 获取表单数据
+        title = request.form['title'].strip()
+        release_date = request.form.get('release_date').strip()
+        country = request.form.get('country').strip()
+        genre = request.form.get('genre').strip()
+        box_office = request.form.get('box_office').strip()
+        director_name = request.form.get('director').strip()
+        director_gender = request.form.get('director_gender').strip()
+        lead_actors = [name.strip() for name in request.form.get('lead_actors').split(',')]
+        lead_actors_gender = [gender.strip() for gender in request.form.get('lead_actors_gender').split(',')]
 
-        if not title  or  len(title) > 60:
-            flash('Invalid Input.')
+         # 检查所有字段是否已填写且非空
+        if not all([title, release_date, country, genre, box_office, director_name, director_gender]) or not all(lead_actors) or not all(lead_actors_gender):
+            flash('All fields must be filled and non-empty.')
+            return redirect(url_for('edit', movie_id=movie_id))
+
+        # 验证主演和性别数量是否匹配
+        if len(lead_actors) != len(lead_actors_gender):
+            flash('The number of lead actors does not match the number of genders.')
             return redirect(url_for('edit', movie_id=movie_id))
         
+        # 检查票房是否为有效数字
         try:
-            # 将字符串转换为日期对象，并从中提取年份
+            box_office_float = float(box_office)
+        except ValueError:
+            flash('Box office must be a valid number.')
+            return redirect(url_for('edit', movie_id=movie_id))
+
+        # 更新电影基本信息
+        try:
             release_date_obj = datetime.datetime.strptime(release_date, '%Y-%m-%d').date()
-            year = release_date_obj.year
+            movie.title = title
+            movie.release_date = release_date_obj
+            movie.year = release_date_obj.year
+            movie.country = country
+            movie.genre = genre
         except ValueError:
             flash('Invalid release date format.')
             return redirect(url_for('edit', movie_id=movie_id))
-        
-        
-        # 更新电影信息
-        movie.title = title
-        movie.release_date = release_date_obj
-        movie.year = str(year)  # 更新年份字段
-        movie.country = country
-        movie.genre = genre
 
+        # 更新票房信息
+        movie_box = MovieBox.query.filter_by(movie_id=movie.id).first() or MovieBox(movie_id=movie.id)
+        movie_box.box = float(box_office)
+        db.session.add(movie_box)
+
+        # 更新或添加导演信息
+        director = Actor.query.filter_by(name=director_name).first() or Actor(name=director_name, gender=director_gender)
+        db.session.add(director)
+        db.session.flush()
+        director_relation = MovieActorRelation.query.filter_by(movie_id=movie.id, actor_id=director.id, relation_type='导演').first() or MovieActorRelation(movie_id=movie.id, actor_id=director.id, relation_type='导演')
+        db.session.add(director_relation)
+
+        # 更新或添加主演信息
+        for i, actor_name in enumerate(lead_actors):
+            actor_gender = lead_actors_gender[i]
+            actor = Actor.query.filter_by(name=actor_name).first() or Actor(name=actor_name, gender=actor_gender)
+            db.session.add(actor)
+            db.session.flush()
+            actor_relation = MovieActorRelation.query.filter_by(movie_id=movie.id, actor_id=actor.id, relation_type='主演').first() or MovieActorRelation(movie_id=movie.id, actor_id=actor.id, relation_type='主演')
+            db.session.add(actor_relation)
 
         db.session.commit()
         flash('Movie updated.')
         return redirect(url_for('index'))
 
-    return render_template('edit.html', movie=movie)
+    return render_template('edit.html', movie=movie, director=director)
+
+
+
 
 
 @app.route('/movie/delete/<int:movie_id>', methods=['POST'])
 @login_required
 def delete(movie_id):
     movie = Movie.query.get_or_404(movie_id)
+
+    # 删除所有依赖于该电影的 MovieBox 记录
+    MovieBox.query.filter_by(movie_id=movie.id).delete()
+
+    # 删除所有依赖于该电影的 MovieActorRelation 记录
+    MovieActorRelation.query.filter_by(movie_id=movie.id).delete()
+
+    # 删除电影
     db.session.delete(movie)
     db.session.commit()
     flash('Item deleted.')
