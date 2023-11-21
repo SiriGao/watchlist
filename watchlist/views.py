@@ -371,3 +371,36 @@ def export_actors():
     response = Response(generate(), mimetype='text/csv')
     response.headers.set('Content-Disposition', 'attachment', filename='actors.csv')
     return response
+
+
+from flask import render_template, request, redirect, url_for, flash
+from werkzeug.security import generate_password_hash
+from watchlist import app, db
+from watchlist.models import User
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        name = request.form.get('name')
+
+        # 简单的验证
+        if not username or not password or not name:
+            flash('Invalid input.')
+            return redirect(url_for('register'))
+
+        # 检查用户名是否已存在
+        if User.query.filter_by(username=username).first():
+            flash('Username already exists.')
+            return redirect(url_for('register'))
+
+        # 创建新用户并存储
+        new_user = User(username=username, name=name)
+        new_user.set_password(password)
+        db.session.add(new_user)
+        db.session.commit()
+
+        return redirect(url_for('login'))
+
+    return render_template('register.html')

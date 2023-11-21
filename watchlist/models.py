@@ -17,12 +17,7 @@ class User(db.Model, UserMixin):
     def validate_password(self, password):
         return check_password_hash(self.password_hash, password)
 
-'''
-class Movie(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(60))
-    year = db.Column(db.String(4))
-'''
+
 class Movie(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)  # 注意这里使用了 String
     title = db.Column(db.String(60))  # 调整为与数据库中的列名匹配
