@@ -216,14 +216,6 @@ def logout():
     return redirect(url_for('index'))
 
 
-# @app.route('/movie/<int:movie_id>')
-# def movie_detail(movie_id):
-#     movie = Movie.query.get_or_404(movie_id)
-#     actors = MovieActorRelation.query.filter_by(movie_id=movie_id).join(Actor, MovieActorRelation.actor_id == Actor.id).all()
-#     box_office = MovieBox.query.filter_by(movie_id=movie_id).first()
-
-#     return render_template('movie_detail.html', movie=movie, actors=actors, box_office=box_office)
-
 @app.route('/movie/<int:movie_id>', methods=['GET', 'POST'])
 def movie_detail(movie_id):
     movie = Movie.query.get_or_404(movie_id)
