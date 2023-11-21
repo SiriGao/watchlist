@@ -54,6 +54,20 @@ class MovieActorRelation(db.Model):
     movie = db.relationship('Movie', backref=db.backref('relations', lazy=True))
     actor = db.relationship('Actor', backref=db.backref('relations', lazy=True))
 
+from datetime import datetime
+from watchlist import db
+
+class Comment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(100))
+    content = db.Column(db.Text)
+    user_id = db.Column(db.String(100))
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow, index=True)
+    movie_id = db.Column(db.Integer, db.ForeignKey('movie.id'))
+
+    movie = db.relationship('Movie', backref=db.backref('comments', lazy='dynamic'))
+
+
 from flask import Flask
 from watchlist import app
 

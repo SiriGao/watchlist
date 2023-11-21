@@ -22,4 +22,25 @@
 <a href="{{ url_for('edit', movie_id=movie.id) }}" class="btn">Edit</a>
 
 
+<!-- 留言板 -->
+<h2>Comments</h2>
+<form method="post">
+    <label for="title">Title:</label>
+    <input type="text" name="title" id="title"><br>
+    <label for="content">Content:</label>
+    <textarea name="content" id="content"></textarea><br>
+    <label for="user_id">User ID:</label>
+    <input type="text" name="user_id" id="user_id"><br>
+    <input type="submit" value="Add Comment">
+</form>
+
+<ul>
+    {% for comment in comments %}
+    <li>{{ comment.title }} by {{ comment.user_id }}: {{ comment.content }}
+        <a href="{{ url_for('delete_comment', comment_id=comment.id) }}">Delete</a>
+    </li>
+    {% endfor %}
+</ul>
+
+
 {% endblock %}

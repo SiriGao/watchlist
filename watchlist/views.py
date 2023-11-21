@@ -4,7 +4,7 @@ from flask import render_template, request, url_for, redirect, flash
 from flask_login import login_user, login_required, logout_user, current_user
 
 from watchlist import app, db
-from watchlist.models import Actor, MovieActorRelation, MovieBox, User, Movie
+from watchlist.models import Actor, Comment, MovieActorRelation, MovieBox, User, Movie
 
 
 from flask import request, url_for, redirect, flash
@@ -216,21 +216,38 @@ def logout():
     return redirect(url_for('index'))
 
 
-@app.route('/movie/<int:movie_id>')
+# @app.route('/movie/<int:movie_id>')
+# def movie_detail(movie_id):
+#     movie = Movie.query.get_or_404(movie_id)
+#     actors = MovieActorRelation.query.filter_by(movie_id=movie_id).join(Actor, MovieActorRelation.actor_id == Actor.id).all()
+#     box_office = MovieBox.query.filter_by(movie_id=movie_id).first()
+
+#     return render_template('movie_detail.html', movie=movie, actors=actors, box_office=box_office)
+
+@app.route('/movie/<int:movie_id>', methods=['GET', 'POST'])
 def movie_detail(movie_id):
     movie = Movie.query.get_or_404(movie_id)
-    actors = MovieActorRelation.query.filter_by(movie_id=movie_id).join(Actor, MovieActorRelation.actor_id == Actor.id).all()
-    box_office = MovieBox.query.filter_by(movie_id=movie_id).first()
+    if request.method == 'POST':
+        title = request.form['title']
+        content = request.form['content']
+        user_id = request.form['user_id']
+        comment = Comment(title=title, content=content, user_id=user_id, movie_id=movie.id)
+        db.session.add(comment)
+        db.session.commit()
+        flash('Your comment has been added.')
+        return redirect(url_for('movie_detail', movie_id=movie_id))
 
-    return render_template('movie_detail.html', movie=movie, actors=actors, box_office=box_office)
+    comments = movie.comments.order_by(Comment.timestamp.desc()).all()
+    return render_template('movie_detail.html', movie=movie, comments=comments)
 
-# @app.route('/movies_with_box_office')
-# def movies_with_box_office():
-#     # 假设 MovieBox 模型包含对 Movie 的引用
-#     movies = Movie.query.all()
-#     movies_box_office = {movie.id: MovieBox.query.filter_by(movie_id=movie.id).first() for movie in movies}
+@app.route('/delete-comment/<int:comment_id>')
+def delete_comment(comment_id):
+    comment = Comment.query.get_or_404(comment_id)
+    db.session.delete(comment)
+    db.session.commit()
+    flash('Your comment has been deleted.')
+    return redirect(url_for('movie_detail', movie_id=comment.movie_id))
 
-#     return render_template('movies_with_box_office.html', movies=movies, movies_box_office=movies_box_office)
 
 @app.route('/movies_with_box_office')
 def movies_with_box_office():
