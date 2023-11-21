@@ -1,10 +1,23 @@
 /* 页面整体 */
 body {
+    background-color: white;
+
+    /* 替换为您的日间模式背景图片路径 */
+    color: black;
+
     margin: auto;
     max-width: 680px;
     font-size: 14px;
     font-family: Helvetica, Arial, sans-serif;
 }
+
+body.dark-mode {
+    background-color: #2b3239;
+    color: white;
+    /* 根据需要调整其他样式，比如链接颜色等 */
+}
+
+
 
 /* 页脚 */
 footer {
@@ -12,6 +25,18 @@ footer {
     margin-top: 15px;
     text-align: center;
     padding: 10px;
+}
+
+body.dark-mode footer {
+    color: white;
+    /* 页脚文字颜色 */
+    /* 可以添加更多关于页脚的样式，如背景颜色等 */
+}
+
+body.dark-mode footer a {
+    color: white;
+    /* 页脚链接的颜色 */
+    /* 可以添加更多关于页脚链接的样式，如下划线颜色等 */
 }
 
 /* 头像 */
@@ -162,4 +187,12 @@ input[name=year] {
     /* 右侧区域占据较小空间 */
     margin-top: 100px;
     /* 在顶部添加20px的间距 */
+}
+
+
+/* 切换夜间模式的按钮样式 */
+#dark-mode-toggle {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
 }

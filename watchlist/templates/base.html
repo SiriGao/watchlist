@@ -7,6 +7,14 @@
     <!-- 设置页面的视口，让页面根据设备的宽度来自动缩放页面，让移动设备拥有更好的浏览体验 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ user.name }}'s Watchlist</title>
+
+
+    <button id="dark-mode-toggle">Dark Mode</button>
+
+
+
+
+
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" type="text/css">
     {% endblock %}
@@ -22,6 +30,26 @@
         <img alt="sweet" class="tang" src="{{ url_for('static', filename='images/740.jpg') }}">
         {{ user.name }}'s Watchlist
     </h2>
+
+    <script>
+        // 页面加载时检查夜间模式状态
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('dark-mode');
+        }
+
+        // 切换夜间模式
+        document.getElementById('dark-mode-toggle').onclick = function () {
+            document.body.classList.toggle('dark-mode');
+
+            // 保存夜间模式状态到 localStorage
+            if (document.body.classList.contains('dark-mode')) {
+                localStorage.setItem('darkMode', 'true');
+            } else {
+                localStorage.setItem('darkMode', 'false');
+            }
+        };
+    </script>
+
     <nav>
         <ul>
             <li><a href="{{ url_for('index') }}">Home</a></li>
