@@ -9,11 +9,6 @@
     <title>{{ user.name }}'s Watchlist</title>
 
 
-    <button id="dark-mode-toggle">Dark Mode</button>
-
-
-
-
 
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" type="text/css">
@@ -31,7 +26,10 @@
         {{ user.name }}'s Watchlist
     </h2>
 
+    <button id="back-to-top">Back to Top</button>
+    <button id="dark-mode-toggle">Dark Mode</button>
     <script>
+
         // 页面加载时检查夜间模式状态
         if (localStorage.getItem('darkMode') === 'true') {
             document.body.classList.add('dark-mode');
@@ -48,6 +46,11 @@
                 localStorage.setItem('darkMode', 'false');
             }
         };
+
+        document.getElementById('back-to-top').onclick = function () {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
     </script>
 
     <nav>

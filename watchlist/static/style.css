@@ -196,3 +196,11 @@ input[name=year] {
     bottom: 10px;
     right: 10px;
 }
+
+#back-to-top {
+    position: fixed;
+    bottom: 40px;
+    /* 距离底部20像素 */
+    right: 10px;
+    /* 距离右侧20像素 */
+}
